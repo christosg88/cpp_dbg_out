@@ -1,0 +1,16 @@
+Checks: '*,
+         -abseil-*,
+         -fuchsia-*,
+         -google-*,
+         -llvm-*,
+         -llvmlibc-*,
+         -zircon-*,
+         -bugprone-easily-swappable-parameters,
+         -modernize-use-trailing-return-type,
+         -modernize-use-trailing-return-type,
+         -readability-avoid-const-params-in-decls,
+         -readability-else-after-return,
+         -readability-identifier-length'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle: none
