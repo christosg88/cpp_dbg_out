@@ -20,33 +20,7 @@ if (ENABLE_STATIC_CHECKS)
   # enable clang-tidy and cppcheck checks
   find_program(CMAKE_CXX_CLANG_TIDY NAMES clang-tidy)
   if (CMAKE_CXX_CLANG_TIDY)
-    string(CONCAT CLANG_TIDY_CHECKS
-      "--checks="
-      "-*,"
-      "boost-*,"
-      "bugprone-*,"
-      "-bugprone-easily-swappable-parameters,"
-      "cert-*,"
-      "clang-analyzer-*,"
-      "concurrency-*,"
-      "cppcoreguidelines-*,"
-      "-cppcoreguidelines-owning-memory,"
-      "misc-*,"
-      "-misc-non-private-member-variables-in-classes,"
-      "modernize-*,"
-      "-modernize-use-auto,"
-      "-modernize-use-trailing-return-type,"
-      "performance-*,"
-      "portability-*,"
-      "readability-*,"
-      "-readability-avoid-const-params-in-decls,"
-      "-readability-else-after-return,"
-      "-readability-function-cognitive-complexity,"
-      "-readability-identifier-length,"
-      "-readability-implicit-bool-conversion"
-    )
-    list(
-      APPEND CMAKE_CXX_CLANG_TIDY "--use-color" ${CLANG_TIDY_CHECKS})
+    list(APPEND CMAKE_CXX_CLANG_TIDY "--use-color")
   endif()
 
   find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
@@ -55,7 +29,8 @@ if (ENABLE_STATIC_CHECKS)
       APPEND CMAKE_CXX_CPPCHECK
         "--language=c++"
         "--std=c++17"
-        "--enable=warning,performance"
+        "--enable=all"
+        "--suppress=missingIncludeSystem"
     )
   endif()
 endif()
