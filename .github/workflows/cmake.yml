@@ -1,0 +1,46 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install cppcheck
+      shell: bash
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+        sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
+        sudo apt update
+        sudo apt install -y cppcheck clang-tidy-14 clang-14 gcc-10
+
+    - name: Configure CMake - Release - GNU
+      run: CC=gcc-10 CXX=g++-10 cmake -S ${{github.workspace}} -B ${{github.workspace}}/build --fresh -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build - Release - GNU
+      run: cmake --build ${{github.workspace}}/build
+
+    - name: Configure CMake - Debug - GNU
+      run: CC=gcc-10 CXX=g++-10 cmake -S ${{github.workspace}} -B ${{github.workspace}}/build --fresh -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build - Debug - GNU
+      run: cmake --build ${{github.workspace}}/build
+
+    - name: Configure CMake - Release - Clang
+      run: CC=clang-14 CXX=clang++-14 cmake -S ${{github.workspace}} -B ${{github.workspace}}/build --fresh -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build - Release - Clang
+      run: cmake --build ${{github.workspace}}/build
+
+    - name: Configure CMake - Debug - Clang
+      run: CC=clang-14 CXX=clang++-14 cmake -S ${{github.workspace}} -B ${{github.workspace}}/build --fresh -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build - Debug - Clang
+      run: cmake --build ${{github.workspace}}/build

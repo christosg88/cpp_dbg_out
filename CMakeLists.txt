@@ -7,7 +7,7 @@ set(DEFAULT_BUILD_TYPE "Release")
 
 # enable all warnings and treat them as errors
 add_compile_options(-Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Wconversion -Wformat=2)
-#add_compile_options(-Werror)
+add_compile_options(-Werror)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   add_compile_options(-Wcast-align)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -20,7 +20,7 @@ if (ENABLE_STATIC_CHECKS)
   # enable clang-tidy and cppcheck checks
   find_program(CMAKE_CXX_CLANG_TIDY NAMES clang-tidy)
   if (CMAKE_CXX_CLANG_TIDY)
-    list(APPEND CMAKE_CXX_CLANG_TIDY "--use-color")
+    list(APPEND CMAKE_CXX_CLANG_TIDY "--use-color" "--extra-arg=-Wno-unknown-warning-option")
   endif()
 
   find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
@@ -31,6 +31,7 @@ if (ENABLE_STATIC_CHECKS)
         "--std=c++17"
         "--enable=all"
         "--suppress=missingIncludeSystem"
+        "--template='{file}:{line}:{column}: {severity}: {message} [cppcheck-{id}]\\n{code}'"
     )
   endif()
 endif()
