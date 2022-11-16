@@ -25,8 +25,13 @@ void dbg_out_impl(char const * const func,
 #define dbg_out(...)
 #endif  // ENABLE_DBG_OUT
 
+constexpr std::string_view am_i_verified() {
+  return "I'm using commit verification!";
+}
+
 int main() {
     dbg_out("Hello", "World", 3);
+    dbg_out("Hello", "World", am_i_verified(), 3);
     return 0;
 }
 
