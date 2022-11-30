@@ -1,32 +1,34 @@
 // https://godbolt.org/z/WaevozddP
-#include "dbg_out.h"
+#include <functional>
+#include <taskflow/taskflow.hpp>
 #include <thread>
 #include <vector>
 
-void print1() {
-  dbg_out("Printing", "from", "print1()");
+#include "dbg_out.h"
+
+void print1(size_t job_id) {
+  dbg_out("Executing", "job", job_id, "from", "print1()");
 }
-void print2() {
-  dbg_out("Printing", "from", "print2()");
+void print2(size_t job_id) {
+  dbg_out("Executing", "job", job_id, "from", "print2()");
 }
-void print3() {
-  dbg_out("Printing", "from", "print3()");
+void print3(size_t job_id) {
+  dbg_out("Executing", "job", job_id, "from", "print3()");
 }
 
 int main() {
-  static constexpr size_t num_threads = 1000;
+  static constexpr size_t num_jobs = 100'000;
 
-  std::vector<std::thread> threads;
-  threads.reserve(num_threads);
-  for (size_t i = 0; i < num_threads; ++i) {
-    threads.emplace_back(print1);
-    threads.emplace_back(print2);
-    threads.emplace_back(print3);
+  tf::Executor ex;
+  tf::Taskflow tf;
+
+  for (size_t i = 0; i < num_jobs; ++i) {
+    tf.emplace([i]() { print1(i); });
+    tf.emplace([i]() { print2(i); });
+    tf.emplace([i]() { print3(i); });
   }
 
-  for (std::thread &t : threads) {
-    t.join();
-  }
+  ex.run(tf).wait();
 
   return 0;
 }

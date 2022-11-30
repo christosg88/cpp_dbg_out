@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.20)
 project(cpp_dbg_out)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # enable all warnings and treat them as errors
 add_compile_options(-Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Wconversion -Wformat=2)
@@ -67,4 +66,5 @@ find_package(Threads REQUIRED)
 
 add_executable(main main.cpp dbg_out.cpp)
 target_link_libraries(main Threads::Threads)
+target_include_directories(main SYSTEM PRIVATE /usr/local/include/taskflow)
 
