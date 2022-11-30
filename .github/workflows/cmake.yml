@@ -12,14 +12,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Install cppcheck
+
+    - name: Install prerequisites
       shell: bash
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
         sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
         sudo apt update
         sudo apt install -y cppcheck clang-tidy-14 clang-14 gcc-10
+        git clone https://github.com/taskflow/taskflow.git
+        cmake --fresh -S taskflow -B taskflow/build -DCMAKE_BUILD_TYPE=Release
+        sudo cmake --install taskflow/build
 
     - name: Configure CMake - Release - GNU
       run: CC=gcc-10 CXX=g++-10 cmake -S ${{github.workspace}} -B ${{github.workspace}}/build --fresh -DCMAKE_BUILD_TYPE=Release
