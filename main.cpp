@@ -1,4 +1,3 @@
-// https://godbolt.org/z/WaevozddP
 #include <functional>
 #include <taskflow/taskflow.hpp>
 #include <thread>
